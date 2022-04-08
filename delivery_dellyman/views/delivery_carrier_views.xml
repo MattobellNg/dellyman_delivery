@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_delivery_carrier_form_inherit_delivery_dellyman" model="ir.ui.view">
+        <field name="name">delivery.carrier.form.inherit.delivery.dellyman</field>
+        <field name="model">delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.view_delivery_carrier_form" />
+        <field name="arch" type="xml">
+            <page name="destination" position="before">
+                <page string="Dellyman Configuration" attrs="{'invisible': [('delivery_type', '!=', 'dellyman')]}">
+                    <group>
+                        <group>
+                            <field name="dellyman_base_price" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                             <field name="dellyman_company_id" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_name" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_email" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_password" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_phonenumber" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_customer_auth" attrs="{'readonly': [('delivery_type', '=', 'dellyman')]}" />
+                        </group>
+                        <group>
+                            <field name="dellyman_baseurl" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_apiid" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_apisecret" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_customer_id" attrs="{'readonly': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_token" attrs="{'readonly': [('delivery_type', '=', 'dellyman')]}" />
+                        </group>
+                        <group>
+                            <button name="dellyman_authenticate" class="oe_stat_button" type="object" icon="fa-play">
+                                <div class="o_stat_info o_field_widget">
+                                    <span class="text-success">Dellyman Auth</span>
+                                </div>
+                            </button>
+                        </group>
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+    <!--  <record id="view_product_packaging_delivery_form_inherit_dellyman" model="ir.ui.view">
+        <field name="name">product.packaging.form.delivery.inherit.dellyman</field>
+        <field name="model">product.packaging</field>
+        <field name="inherit_id" ref="delivery.product_packaging_delivery_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='package_carrier_type']" position='after'>
+                <field name="dellyman_carrier" attrs="{'invisible': [('package_carrier_type', '!=', 'dellyman')]}" />
+            </xpath>
+            <xpath expr="//field[@name='height']" position='replace'>
+                <label for="height" />
+                <div class="o_row">
+                    <field name="height" nolabel="1" />
+                    <span attrs="{'invisible': [('package_carrier_type', '!=', 'dellyman')]}">Inches</span>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='width']" position='replace'>
+                <label for="width" />
+                <div class="o_row">
+                    <field name="width" nolabel="1" />
+                    <span attrs="{'invisible': [('package_carrier_type', '!=', 'dellyman')]}">Inches</span>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='length']" position='replace'>
+                <label for="length" />
+                <div class="o_row">
+                    <field name="length" nolabel="1" />
+                    <span attrs="{'invisible': [('package_carrier_type', '!=', 'dellyman')]}">Inches</span>
+                </div>
+            </xpath>
+        </field>
+    </record> -->
+</odoo>

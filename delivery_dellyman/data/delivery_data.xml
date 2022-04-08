@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="product_product_dellyman_delivery" model="product.product">
+            <field name="name">Dellyman Delivery Charges</field>
+            <field name="default_code">Delivery_00100</field>
+            <field name="type">service</field>
+            <field name="categ_id" ref="delivery.product_category_deliveries" />
+            <field name="sale_ok" eval="False" />
+            <field name="purchase_ok" eval="False" />
+            <field name="list_price">0.0</field>
+        </record>
+        <record id="dellyman_delivery_carrier" model="delivery.carrier">
+            <field name="name">Dellyman Delivery</field>
+            <field name="fixed_price">0.0</field>
+            <field name="free_over" eval="False" />
+            <field name="sequence">1</field>
+            <field name="delivery_type">dellyman</field>
+            <field name="product_id" ref="delivery_dellyman.product_product_dellyman_delivery" />
+        </record>
+    </data>
+</odoo>
