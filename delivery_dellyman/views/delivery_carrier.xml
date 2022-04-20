@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_delivery_carrier_form" model="ir.ui.view">
+        <field name="name">delivery.carrier.form.inherit.delivery.dellyman</field>
+        <field name="model">delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.view_delivery_carrier_form" />
+        <field name="arch" type="xml">
+            <page name="destination" position="after">
+                <page string="Dellyman Pricing" attrs="{'invisible': [('delivery_type', '!=', 'dellyman')]}">
+                    <group>
+                    <group >
+                        <field name="dellyman_api_key" attrs="{'required': [('delivery_type', '=', 'dellyman')]}"/>            
+                    </group>
+                    <group>
+                        <field name="dellyman_base_price" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />            
+                    </group>
+                    <group>
+                        <field name="dellyman_rate_per_km" attrs="{'required': [('delivery_type', '=', 'dellyman')]}"/>            
+                    </group>
+                     <group>
+                        <field name="dellyman_base_distance" attrs="{'required': [('delivery_type', '=', 'dellyman')]}"/>            
+                    </group>
+                </group>
+                    
+                    
+                    <field name="dellyman_algorithm_ids" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />            
+                </page>
+          
+            </page>
+        </field>
+    </record>
+
+    <record id="dellyman_algorithm_tree" model="ir.ui.view">
+        <field name="name">dellyman.algorithm.tree</field>
+        <field name="model">dellyman.algorithm</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name"/> 
+                <field name="from_amount"/>            
+                <field name="to_amount" />  
+                <field name="percentage"/>                    
+            </tree>
+        </field>
+    </record>
+</odoo>
+

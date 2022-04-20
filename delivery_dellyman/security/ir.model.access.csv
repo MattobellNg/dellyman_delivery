@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_delivery_dellyman_delivery_dellyman,delivery_dellyman.delivery_dellyman,model_delivery_dellyman_delivery_dellyman,,1,0,0,0
+access_dellyman_algorithm,access_dellyman_algorithm,model_dellyman_algorithm,base.group_user,1,1,1,1

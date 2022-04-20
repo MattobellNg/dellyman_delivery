@@ -2,21 +2,92 @@
 <odoo>
     <data noupdate="1">
         <record id="product_product_dellyman_delivery" model="product.product">
-            <field name="name">Dellyman Delivery Charges</field>
-            <field name="default_code">Delivery_00100</field>
+            <field name="name">Dellyman Delivery</field>
+            <field name="default_code">Delivery</field>
             <field name="type">service</field>
-            <field name="categ_id" ref="delivery.product_category_deliveries" />
             <field name="sale_ok" eval="False" />
             <field name="purchase_ok" eval="False" />
             <field name="list_price">0.0</field>
         </record>
-        <record id="dellyman_delivery_carrier" model="delivery.carrier">
-            <field name="name">Dellyman Delivery</field>
+        <record id="delivery_carrier_dellyman" model="delivery.carrier">
+            <field name="name">Dellyman Logistics</field>
             <field name="fixed_price">0.0</field>
             <field name="free_over" eval="False" />
             <field name="sequence">1</field>
             <field name="delivery_type">dellyman</field>
+            <field name="dellyman_api_key">eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiODQwIn0.2K9cUG2vG7voaPMW90sCxSBWy3c_u4lVBHf1xzZUz_A</field>
             <field name="product_id" ref="delivery_dellyman.product_product_dellyman_delivery" />
+        </record>
+        <!-- rate -->
+        <record id="dellyman_algorithm_1" model="dellyman.algorithm">
+            <field name="name">1 - 500</field> 
+            <field name="from_amount" eval="1"/>            
+            <field name="to_amount"  eval="500"/>  
+            <field name="percentage" eval="5"/> 
+            <field name="delivery_carrier_id" ref="delivery_dellyman.delivery_carrier_dellyman"/> 
+        </record>
+        <record id="dellyman_algorithm_2" model="dellyman.algorithm">
+            <field name="name">501 - 5000</field> 
+            <field name="from_amount" eval="501"/>            
+            <field name="to_amount"  eval="5000"/>  
+            <field name="percentage" eval="3.5"/> 
+            <field name="delivery_carrier_id" ref="delivery_dellyman.delivery_carrier_dellyman"/> 
+        </record>
+        <record id="dellyman_algorithm_3" model="dellyman.algorithm">
+            <field name="name">5001 - 10000</field> 
+            <field name="from_amount" eval="5001"/>            
+            <field name="to_amount"  eval="10000"/>  
+            <field name="percentage" eval="2.5"/> 
+            <field name="delivery_carrier_id" ref="delivery_dellyman.delivery_carrier_dellyman"/> 
+        </record>
+        <record id="dellyman_algorithm_4" model="dellyman.algorithm">
+            <field name="name">10001 - 20000</field> 
+            <field name="from_amount" eval="10001"/>            
+            <field name="to_amount"  eval="20000"/>  
+            <field name="percentage" eval="2.0"/> 
+            <field name="delivery_carrier_id" ref="delivery_dellyman.delivery_carrier_dellyman"/> 
+        </record>
+        <record id="dellyman_algorithm_5" model="dellyman.algorithm">
+            <field name="name">20001 - 50000</field> 
+            <field name="from_amount" eval="20001"/>            
+            <field name="to_amount"  eval="50000"/>  
+            <field name="percentage" eval="1.5"/> 
+            <field name="delivery_carrier_id" ref="delivery_dellyman.delivery_carrier_dellyman"/> 
+        </record>
+        <record id="dellyman_algorithm_6" model="dellyman.algorithm">
+            <field name="name">50001 - 100000</field> 
+            <field name="from_amount" eval="50001"/>            
+            <field name="to_amount"  eval="100000"/>  
+            <field name="percentage" eval="1.1"/> 
+            <field name="delivery_carrier_id" ref="delivery_dellyman.delivery_carrier_dellyman"/> 
+        </record>
+        <record id="dellyman_algorithm_7" model="dellyman.algorithm">
+            <field name="name">100001 - 200000</field> 
+            <field name="from_amount" eval="100001"/>            
+            <field name="to_amount"  eval="200000"/>  
+            <field name="percentage" eval="0.55"/> 
+            <field name="delivery_carrier_id" ref="delivery_dellyman.delivery_carrier_dellyman"/> 
+        </record>
+        <record id="dellyman_algorithm_8" model="dellyman.algorithm">
+            <field name="name">200001 - 500000</field> 
+            <field name="from_amount" eval="200001"/>            
+            <field name="to_amount"  eval="2000000"/>  
+            <field name="percentage" eval="0.5"/> 
+            <field name="delivery_carrier_id" ref="delivery_dellyman.delivery_carrier_dellyman"/> 
+        </record>
+        <record id="dellyman_algorithm_9" model="dellyman.algorithm">
+            <field name="name">2000001 - 5000000</field> 
+            <field name="from_amount" eval="2000001"/>            
+            <field name="to_amount"  eval="5000000"/>  
+            <field name="percentage" eval="0.3"/> 
+            <field name="delivery_carrier_id" ref="delivery_dellyman.delivery_carrier_dellyman"/> 
+        </record>
+        <record id="dellyman_algorithm_10" model="dellyman.algorithm">
+            <field name="name">5000001 - 1000000000</field> 
+            <field name="from_amount" eval="5000001"/>            
+            <field name="to_amount"  eval="1000000000"/>  
+            <field name="percentage" eval="0.05"/> 
+            <field name="delivery_carrier_id" ref="delivery_dellyman.delivery_carrier_dellyman"/> 
         </record>
     </data>
 </odoo>
