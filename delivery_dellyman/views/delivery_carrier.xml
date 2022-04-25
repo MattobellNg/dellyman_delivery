@@ -8,39 +8,34 @@
             <page name="destination" position="after">
                 <page string="Dellyman Pricing" attrs="{'invisible': [('delivery_type', '!=', 'dellyman')]}">
                     <group>
-                    <group >
-                        <field name="dellyman_api_key" attrs="{'required': [('delivery_type', '=', 'dellyman')]}"/>            
+                        <group>
+                            <field name="dellyman_login" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_password" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" password="1" />
+                            <field name="dellyman_api_key" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_rate_per_km" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                        </group>
+                        <group>
+                            <field name="dellyman_companyid" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" help="Change the value to 840 for live booking" />
+                            <field name="dellyman_base_price" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_base_url" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                            <field name="dellyman_base_distance" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
+                        </group>
                     </group>
-                    <group>
-                        <field name="dellyman_base_price" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />            
-                    </group>
-                    <group>
-                        <field name="dellyman_rate_per_km" attrs="{'required': [('delivery_type', '=', 'dellyman')]}"/>            
-                    </group>
-                     <group>
-                        <field name="dellyman_base_distance" attrs="{'required': [('delivery_type', '=', 'dellyman')]}"/>            
-                    </group>
-                </group>
-                    
-                    
-                    <field name="dellyman_algorithm_ids" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />            
+                    <field name="dellyman_algorithm_ids" attrs="{'required': [('delivery_type', '=', 'dellyman')]}" />
                 </page>
-          
             </page>
         </field>
     </record>
-
     <record id="dellyman_algorithm_tree" model="ir.ui.view">
         <field name="name">dellyman.algorithm.tree</field>
         <field name="model">dellyman.algorithm</field>
         <field name="arch" type="xml">
             <tree editable="top">
-                <field name="name"/> 
-                <field name="from_amount"/>            
-                <field name="to_amount" />  
-                <field name="percentage"/>                    
+                <field name="name" />
+                <field name="from_amount" />
+                <field name="to_amount" />
+                <field name="percentage" />
             </tree>
         </field>
     </record>
 </odoo>
-

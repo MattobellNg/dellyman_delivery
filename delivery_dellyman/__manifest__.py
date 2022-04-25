@@ -7,14 +7,14 @@
     "author": "Matt O'Bell",
     "website": "http://www.yourcompany.com",
     "category": "Uncategorized",
-    "version": "11.0.1.0.0",
+    "version": "11.0.1.0",
     "depends": ["base", "sale_stock", "delivery", "base_geolocalize"],
     # always loaded
     "data": [
         "security/ir.model.access.csv",
         "data/delivery_data.xml",
+        "views/stock_picking.xml",
         "views/delivery_carrier.xml",
-        "views/views.xml",
     ],
     "external_dependencies": {
         "python": ["geopy"],

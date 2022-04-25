@@ -12,9 +12,7 @@ class ResPartner(models.AbstractModel):
     _inherit = "res.partner"
 
     @classmethod
-    def _geocode_address(
-        cls, street=None, zip_code=None, city=None, state=None, country=None
-    ):
+    def _geocode_address(cls, street=None, zip_code=None, city=None, state=None, country=None):
         """Get the latitude and longitude by requesting Openstreetmap" """
         pay_load = {
             "limit": 1,

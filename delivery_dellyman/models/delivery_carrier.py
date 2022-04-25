@@ -12,7 +12,11 @@ import urllib
 import datetime
 from statistics import mean
 
-from geopy import distance
+
+try:
+    from geopy import distance
+except Exception:
+    raise UserError("Please install geopy via pip install")
 
 TIMEOUT = 20
 REQUEST_HEADER = {"Content-type": "application/json"}
@@ -21,20 +25,20 @@ REQUEST_HEADER = {"Content-type": "application/json"}
 class DeliverCarrier(models.Model):
     _inherit = "delivery.carrier"
 
+    dellyman_login = fields.Char(string="Login")
     dellyman_api_key = fields.Char(string="API Key")
+    dellyman_password = fields.Char(string="Password")
+    dellyman_base_url = fields.Char(string="Base URL")
     delivery_type = fields.Selection(selection_add=[("dellyman", "Dellyman")])
     dellyman_base_price = fields.Float(string="Base Price", required=False, default=500)
-    dellyman_rate_per_km = fields.Float(
-        default=20, required=False, string="Rate Per Km"
-    )
-    dellyman_base_distance = fields.Float(
-        default=10, required=False, string="Base Distance"
-    )
+    dellyman_rate_per_km = fields.Float(default=20, required=False, string="Rate Per Km")
+    dellyman_base_distance = fields.Float(default=10, required=False, string="Base Distance")
     dellyman_algorithm_ids = fields.One2many(
         comodel_name="dellyman.algorithm",
         inverse_name="delivery_carrier_id",
         ondelete="cascade",
     )
+    dellyman_companyid = fields.Integer(string="Company ID", default=762)
 
     def get_distance_between_store_and_delivery(self, order):
         partner_shipping_id = order.partner_shipping_id
@@ -65,9 +69,7 @@ class DeliverCarrier(models.Model):
             return {
                 "success": False,
                 "price": 0.0,
-                "error_message": _(
-                    "Error: this delivery method is not available for this address."
-                ),
+                "error_message": _("Error: this delivery method is not available for this address."),
                 "warning_message": False,
             }
         amount_total = order.amount_total
@@ -93,38 +95,60 @@ class DeliverCarrier(models.Model):
             "warning_message": False,
         }
 
+    def _dellyman_customer_details(self):
+        dellyman = self.env.ref("delivery_dellyman.delivery_carrier_dellyman")
+        headers = {
+            "Authorization": "Bearer %s" % (dellyman.dellyman_api_key),
+        }
+        url = url_join(dellyman.dellyman_base_url, "/api/v3.0/Login")
+        payload = {"Email": dellyman.dellyman_login, "Password": dellyman.dellyman_password}
+        res = requests.post(url, json=payload, headers=headers).json()
+        return {
+            "CustomerID": res.get("CustomerID"),
+            "CustomerAuth": res.get("CustomerAuth"),
+            "CompanyID": dellyman.dellyman_companyid,
+        }
+
     def dellyman_send_shipping(self, pickings):
-        url = "https://dev.dellyman.com/api/v3.0/BookOrder"
+        dellyman = self.env.ref("delivery_dellyman.delivery_carrier_dellyman")
+        url = url_join(dellyman.dellyman_base_url, "/api/v3.0/BookOrder")
+
         headers = {
             "Authorization": "Bearer %s" % (self.dellyman_api_key),
         }
-        payload = {
-            "CustomerID": 2,
-            "CustomerAuth": "dfSVhQ8jQh0trncHkdELvwHgskI1Rj0w",
-            "CompanyID": 762,
-            "PaymentMode": "pickup",
-            "Vehicle": "Bike",
-            "PickUpContactName": "Administrator",
-            "PickUpContactNumber": "07068937300",
-            "PickUpGooglePlaceAddress": "3 Allen Avenue Lagos Lagos",
-            "PickUpLandmark": " ",
-            "IsInstantDelivery": 1,
-            "PickUpRequestedDate": "",
-            "PickUpRequestedTime": "",
-            "DeliveryRequestedTime": "",
-            "Packages": [
-                {
-                    "PackageDescription": "Allen/OUT/00024",
-                    "DeliveryContactName": "Babatope Ajepe",
-                    "DeliveryContactNumber": "07055667789",
-                    "DeliveryGooglePlaceAddress": "73 Allen Avenue Ikeja Lagos",
-                    "DeliveryLandmark": "",
-                }
-                for picking in pickings
-            ],
-        }
-        res = requests.post(url, json=payload, headers=headers)
-        print(res.text, "!!!!!!!!!!!!!!!!!!!!!!!!1")
+        customer_details = self._dellyman_customer_details()
+        for picking in pickings:
+            payload = {
+                "PaymentMode": "pickup",
+                "Vehicle": picking.carrier_type,
+                "PickUpContactName": picking.company_id.partner_id.name,
+                "PickUpContactNumber": picking.company_id.partner_id.phone,
+                "PickUpGooglePlaceAddress": picking.company_id.partner_id._display_address(),
+                "PickUpLandmark": " ",
+                "IsInstantDelivery": 1,
+                "PickUpRequestedDate": "",
+                "PickUpRequestedTime": "",
+                "DeliveryRequestedTime": "",
+                "Packages": [
+                    {
+                        "PackageDescription": move_line.product_id.name,
+                        "DeliveryContactName": picking.partner_id.name,
+                        "DeliveryContactNumber": picking.partner_id.phone,
+                        "DeliveryGooglePlaceAddress": picking.partner_id._display_address(),
+                    }
+                    for move_line in picking.move_lines
+                ],
+            }
+            payload.update(customer_details)
+            exact_price = self._get_exact_price(picking)
+            res = requests.post(url, json=payload, headers=headers).json()
+            print(res, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!@', payload)
+        if res.get("ResponseCode") != 101:
+            raise UserError( res.get("ResponseMessage"))
+        return [{"exact_price": exact_price, "tracking_number": res.get("OrderID")}]
+
+    def _get_exact_price(self, pickings):
+        return pickings.mapped("sale_id").delivery_price
 
 
 class DellymanAlgorithm(models.Model):
